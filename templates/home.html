@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='style.css')}}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">    
+</head>
+<body>
+    <nav id="horinav">
+        <form action="/home" name="navbar" method="post" class="navform">
+        <a href="/home" class="navbutton"><button>Home</button></a>
+        {% for subject in navsub %}
+            <button name="navbarsubject" value="{{ subject }}" class="navbutton">{{ subject }}</button>
+        {% endfor %}
+    </form>
+    <a href="/favorites" class="navbutton"><button>Favorites</button></a>
+    <a href="/editsubjects" class="navbutton"><button>Edit Subjects</button></a>
+    </nav>
+    <div id="nav-files">
+    <nav id="whitenav">
+        <div><a href="/upload" style="text-decoration: none;"><button id="upload-button">+</button></a><span style="text-decoration: none;color: #583DA1;">ADD FILE</span></div>
+    </nav>
+    <form action="/home" name="getfile" method="post" style="padding: 3rem;">
+        <div id="home-container">
+            {% for i in range(pdflist|length) %}  
+            <div id="pdf-file-containter">
+                {% if pdflist[i] in favoritelist %}
+                <button name="favorite" id="favorite-button" value="{{ pdflist[i] }}" style="background-color: rgb(255, 208, 0); border-color: rgb(255, 208, 0);"></button>
+                {% else %}
+                <button name="favorite" id="favorite-button" value="{{ pdflist[i] }}"></button>
+                {% endif %}
+                <div id="pdf-details">
+                <embed id="pdf-file" src="{{ pdflist[i]['filelink'] }}"><br>
+                    <p>{{ pdflist[i]['filename'][:-4] }}</p>
+                </div>
+                <button id="download-button" name="pdfbutton" value="{{ pdflist[i] }}">Download</button>
+            </div>
+            {% endfor %}
+            {% if pdflist|length == 0 %}
+            <p>Sorry we don't have any files for this subject</p>
+            {% endif %}
+        </div>
+    </form>
+</div>
+</body>
+</html>

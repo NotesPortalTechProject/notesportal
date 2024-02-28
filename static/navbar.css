@@ -1,0 +1,22 @@
+
+.navform{
+    background-color: black;
+    color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+}
+nav{
+    display: flex;
+    flex-direction: column;
+    display: block;
+    margin-left: 0;
+    margin-right: auto;
+    /* height: 100vh; */
+    width: 10rem;
+    position: sticky;
+    
+}
+.navbutton{
+    width: 10rem;
+}

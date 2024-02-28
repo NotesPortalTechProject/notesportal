@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='style.css')}}">
+</head>
+<body>
+    
+    <form action="" name="user" method="post" enctype="multipart/form-data" style="padding: 3rem;">
+        <label for="firstname">First Name</label>
+        <input type="text" name="firstname" value="{{ firstname }}"><br>
+        <label for="lastname">Last Name</label>
+        <input type="text" name="lastname" value="{{ lastname }}"><br>
+        <label for="username">Username</label>
+        <input type="text" name="username" value="{{ username }}"><br>
+        <label for="email">Email</label>
+        <input type="email" name="email" value="{{ mail }}"><br>
+        <label for="numsub">Number of Subjects:</label>
+        <input type="number" name="numsub" id="numsub" value="{{ num }}" min="0"><br>
+        {% for x in range(num) %}
+        <label for="subject_{{ x }}">Subject {{ x+1 }}</label>
+        <input type="text" name="subject_{{ x }}"><br>
+        {% endfor %}
+        <button type="submit">Submit</button><br>
+    </form>
+</body>
+</html>

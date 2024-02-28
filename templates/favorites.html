@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static',filename='style.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='navbar.css')}}">
+    <title>Document</title>
+</head>
+<body>
+    <nav id="horinav">
+        <form action="/home" name="navbar" method="post" class="navform">
+        <a href="/home" class="navbutton"><button>Home</button></a>
+        {% for subject in navsub %}
+            <button name="navbarsubject" value="{{ subject }}" class="navbutton">{{ subject }}</button>
+        {% endfor %}
+    </form>
+    <a href="/favorites" class="navbutton"><button>Favorites</button></a>
+    </nav>
+    <div id="nav-files">
+        <nav id="whitenav">
+            <div><a href="/upload" style="text-decoration: none;"><button id="upload-button">+</button></a><span style="text-decoration: none;color: #583DA1;">ADD FILE</span></div>
+        </nav>
+    <form action="/favorites" name="getfile" method="post" style="padding: 3rem;">
+        <div id="home-container" style="display: flex;">
+            {% for pdf in favoritelist %} 
+            <div id="pdf-file-containter">
+            <button id="unfavorite-button" name="unfavorite" value="{{ pdf }}" style="background-color: rgb(255, 208, 0); border-color: rgb(255, 208, 0);"></button>
+            <div id="pdf-details">
+                <embed src="{{ pdf['filelink'] }}"><br>
+                    <p>{{ pdf['filename'] }}</p>
+                </div>
+                <button id="download-button" name="pdfbutton" value="{{ pdf }}">Download</button>
+            </div> 
+            {% endfor %}
+        </div>
+    </form>
+    </div>
+</body>
+</html>
