@@ -95,14 +95,7 @@ def upload():
         filename = secure_filename(subject+"_"+topic+"."+filetype)
         filelink = f"static/database/{filename}"
         file.save(filelink)
-        if filetype == "doc" or filetype == "docx":
-            convert(f"static/database/{filename}",f"static/database/{filename.split('.')[0] + '.pdf'}")
-            Path(f"static/database/{filename}").unlink()
-            filename = filename.split(".")[0] + ".pdf"
-            filelink = f"static/database/{filename}"
-            supabase.table('notes').insert({"id": id,"date": date,"filename": filename,"subjectname": subject,"filetype": filetype,"filelink": filelink}).execute()
-        else:
-            supabase.table('notes').insert({"id": id,"date": date,"filename": filename,"subjectname": subject,"filetype": filetype,"filelink": filelink}).execute()
+        supabase.table('notes').insert({"id": id,"date": date,"filename": filename,"subjectname": subject,"filetype": filetype,"filelink": filelink}).execute()
     return render_template("upload.html")
 
 @app.route("/favorites",methods=["POST","GET"])
