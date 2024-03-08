@@ -13,17 +13,19 @@
     <nav id="horinav">
         <form action="/home" name="navbar" method="post" class="navform">
         <a href="/home" class="navbutton"><button>Home</button></a>
-        {% for subject in navsub %}
+        {% for subject in navsublst %}
             <button name="navbarsubject" value="{{ subject }}" class="navbutton">{{ subject }}</button>
         {% endfor %}
     </form>
     <a href="/favorites" class="navbutton"><button>Favorites</button></a>
-    <a href="/editsubjects" class="navbutton"><button>Edit Subjects</button></a>
+    <a href="/addsubjects" class="navbutton"><button>Add Subjects</button></a>
+    <a href="/removesubjects" class="navbutton"><button>Remove Subjects</button></a>
     </nav>
     <div id="nav-files">
     <nav id="whitenav">
         <div><a href="/upload" style="text-decoration: none;"><button id="upload-button">+</button></a><span style="text-decoration: none;color: #583DA1;">ADD FILE</span></div>
     </nav>
+    
     <form action="/home" name="getfile" method="post" style="padding: 3rem;">
         <div id="home-container">
             {% for i in range(pdflist|length) %}  
