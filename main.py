@@ -53,7 +53,8 @@ def home(id):
     navsub = supabase.table('users').select('*').eq('id',id).execute().data[0]
     favoritelist = supabase.table('users').select('favorites').eq('id',id).execute().data[0]["favorites"]
     datalist = []
-    print("prepost")
+    if not favoritelist:
+        favoritelist = []
     data = session.get("data")
     if request.method == "POST":
         try:
@@ -78,10 +79,7 @@ def home(id):
             data = session.get("data")
             datalist = supabase.table('notes').select('*').eq('subjectname',data).execute().data
             favoritelist = favoritelist.replace(favorite,"")
-            print(favoritelist)
             supabase.table('users').update({'favorites':favoritelist}).eq('id',id).execute()
-    print(data)
-    print(datalist)
     return render_template("home.html",navsublst=eval(navsub["subjects"]),pdflist=datalist,favoritelist=favoritelist,id=navsub["id"])
 
 @app.route("/upload/<id>",methods=["POST","GET"])
