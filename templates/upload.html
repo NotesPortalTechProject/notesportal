@@ -8,16 +8,16 @@
 </head>
 <body>
     <nav id="horinav">
-        <form action="/home" name="navbar" method="post" class="navform">
-        <a href="/home" class="navbutton"><button>Home</button></a>
+        <form action="/home/{{id}}" name="navbar" method="post" class="navform">
+        <a href="/home/{{id}}" class="navbutton"><button>Home</button></a>
         {% for subject in navsub %}
             <button name="navbarsubject" value="{{ subject }}" class="navbutton">{{ subject }}</button>
         {% endfor %}
     </form>
-    <a href="/favorites" class="navbutton"><button>Favorites</button></a>
+    <a href="/favorites/{{id}}" class="navbutton"><button>Favorites</button></a>
     </nav>
     <div id="upload-form-container">
-    <form action="/upload" method="post" enctype="multipart/form-data" class="uploadform" >
+    <form action="/upload/{{id}}" method="post" enctype="multipart/form-data" class="uploadform" >
         <input type="file" name="file" required>
         <label for="subject" >
             <input name="subject" style="width: 20rem;" type="text" placeholder="eg LADE for Linear Algebra and Differential Equation" required><br>

@@ -11,32 +11,32 @@
 </head>
 <body>
     <nav id="horinav">
-        <form action="/home" name="navbar" method="post" class="navform">
-        <a href="/home" class="navbutton"><button>Home</button></a>
+        <form action="/home/{{id}}" name="navbar" method="post" class="navform">
+        <a href="/home/{{id}}" class="navbutton"><button>Home</button></a>
         {% for subject in navsublst %}
             <button name="navbarsubject" value="{{ subject }}" class="navbutton">{{ subject }}</button>
         {% endfor %}
-    </form>
-    <a href="/favorites" class="navbutton"><button>Favorites</button></a>
-    <a href="/addsubjects" class="navbutton"><button>Add Subjects</button></a>
-    <a href="/removesubjects" class="navbutton"><button>Remove Subjects</button></a>
+        </form>
+        <a href="/favorites/{{id}}" class="navbutton"><button>Favorites</button></a>
+        <a href="/addsubjects/{{id}}" class="navbutton"><button>Add Subjects</button></a>
+        <a href="/removesubjects/{{id}}" class="navbutton"><button>Remove Subjects</button></a>
+        <!-- </form>     -->
     </nav>
     <div id="nav-files">
     <nav id="whitenav">
-        <div><a href="/upload" style="text-decoration: none;"><button id="upload-button">+</button></a><span style="text-decoration: none;color: #583DA1;">ADD FILE</span></div>
+        <div><a href="/upload/{{id}}" style="text-decoration: none;"><button id="upload-button">+</button></a><span style="text-decoration: none;color: #583DA1;">ADD FILE</span></div>
     </nav>
-    
-    <form action="/home" name="getfile" method="post" style="padding: 3rem;">
+    <form action="/home/{{id}}" name="getfile" method="post" style="padding: 3rem;">
         <div id="home-container">
             {% for i in range(pdflist|length) %}  
             <div id="pdf-file-containter">
-                {% if pdflist[i] in favoritelist %}
-                <button name="favorite" id="favorite-button" value="{{ pdflist[i] }}" style="background-color: rgb(255, 208, 0); border-color: rgb(255, 208, 0);"></button>
+                {% if pdflist[i]['id'] in favoritelist %}
+                <button name="favorite" id="favorite-button" value="{{ pdflist[i]['id'] }}" style="background-color: rgb(255, 208, 0); border-color: rgb(255, 208, 0);"></button>
                 {% else %}
-                <button name="favorite" id="favorite-button" value="{{ pdflist[i] }}"></button>
+                <button name="favorite" id="favorite-button" value="{{ pdflist[i]['id'] }}"></button>
                 {% endif %}
                 <div id="pdf-details">
-                <embed id="pdf-file" src="{{ pdflist[i]['filelink'] }}"><br>
+                <embed id="pdf-file" src="/{{ pdflist[i]['filelink'] }}"><br>
                     <p>{{ pdflist[i]['filename'][:-4] }}</p>
                 </div>
                 <button id="download-button" name="pdfbutton" value="{{ pdflist[i] }}">Download</button>
