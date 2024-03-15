@@ -162,6 +162,8 @@ def signin():
             navsub[i] = j
         return redirect(url_for("home",id=navsub["id"]))
     return render_template("signin.html")
-
+@app.route("/sharvil")
+def sharvil():
+    return render_template("sharvil.html")
 if "__main__" == __name__:
     app.run(debug=True)
