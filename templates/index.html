@@ -6,9 +6,13 @@
     <title>Document</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='style.css')}}">
 </head>
-<body>
-    
-    <form action="" name="user" method="post" enctype="multipart/form-data" style="padding: 3rem;">
+<body style="margin: 0;overflow-y: hidden;">
+    <div id="login-form-div"> 
+        <div id="image-form">
+            <img src="static/form-image.jpeg" alt="">
+        </div>
+    <div id="signin-form-div">
+    <form action="" name="user" method="post" enctype="multipart/form-data" style="padding: 3rem;" id="form-signin">
         <label for="firstname">First Name</label>
         <input type="text" name="firstname" value="{{ firstname }}"><br>
         <label for="lastname">Last Name</label>
@@ -25,6 +29,8 @@
         {% endfor %}
         <button type="submit">Submit</button><br>
     </form>
-    <a href="/signin"><button>Sign in</button></a>
+    <a href="/signin" style="height: 1.2rem;"><button id="signinbutton">Sign in</button></a>
+</div>
+</div>
 </body>
 </html>

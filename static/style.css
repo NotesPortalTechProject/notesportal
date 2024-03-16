@@ -131,4 +131,44 @@ body{
     flex-direction: column;
     padding-left: 11rem;
 }
+#login-form-div{
+    display: flex;
+    /* width: 50vw; */
+    justify-content: center;
+}
+#form-signin{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    font-size: 1.2rem;
+}
+#form-signin input{
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid black;
+    margin-top: 1rem;
+    font-size: 1.2rem;
+}
+#form-signin button{
+    background-color: blueviolet;
+    border-radius: 5rem;
+    color: white;
+    font-size: 1.2rem;
+    width: 10rem;
+    border: none;
+}
+#signinbutton{
+    background-color: white;
+    border-radius: 5rem;
+    color: blueviolet;
+    font-size: 1.2rem;
+    width: 10rem;
+    border: none;
+}
+#signin-form-div{
+    width: 50vw;
+}
+*:focus{
+    outline: none;
+}
 /* ALIGN THE UPLOAD BUTTON */
