@@ -54,7 +54,7 @@ def home(id):
     favoritelist = supabase.table('users').select('favorites').eq('id',id).execute().data[0]["favorites"]
     datalist = []
     if not favoritelist:
-        favoritelist = []
+        favoritelist = ""
     data = session.get("data")
     if request.method == "POST":
         try:
