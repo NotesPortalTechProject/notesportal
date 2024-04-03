@@ -1,4 +1,4 @@
-from flask import Flask,render_template,redirect,send_file,request,url_for,session
+from flask import Flask,render_template,redirect,send_file,request,url_for,session,flash
 from flask_session import Session
 import random,string,json
 from datetime import datetime
@@ -22,7 +22,6 @@ def index():
     mail = ""
     num = 0
     subjectlst = []
-    session["data"] = ""
     if request.method == "POST":
         firstname = request.form["firstname"]
         lastname = request.form["lastname"]
@@ -34,8 +33,9 @@ def index():
             try:
                 for x in range(num):
                     subjectlst.append(request.form[f"subject_{x}"].upper())
-                # sendmail(username,mail=mail,message=f"""Hello {username}
-    # Welcome To Our Portal""")
+                session["data"] = subjectlst[0]
+                sendmail(username,mail=mail,message=f"""Hello {username}
+    Welcome To Our Portal""")
                 supabase.table('users').insert({"id": id,"firstname": firstname,"lastname": lastname,"username": username,"email": mail,"subjects": str(subjectlst)}).execute()
                 navtemplst = [id,firstname,lastname,username,mail,str(subjectlst)]
                 keylst = ["id","firstname","lastname","username","email","subjects"]
@@ -54,6 +54,12 @@ def home(id):
     navsub = supabase.table('users').select('*').eq('id',id).execute().data[0]
     favoritelist = supabase.table('users').select('favorites').eq('id',id).execute().data[0]["favorites"]
     datalist = []
+    preview = ""
+    tempnavsub = eval(navsub["subjects"])
+    active = ""
+    active_r = ""
+    active_u = ""
+    num=0
     if not favoritelist:
         favoritelist = ""
     data = session.get("data")
@@ -66,11 +72,12 @@ def home(id):
         except KeyError:
             pass
         choosefile = request.form.get("pdfbutton")
+        favorite = request.form.get("favorite")
+        print(data)
         if choosefile:
             choosefile = choosefile.replace("\'","\"")
             choosefile = json.loads(choosefile)
             return send_file(choosefile["filelink"],download_name=choosefile["filename"],as_attachment=True)
-        favorite = request.form.get("favorite")
         if favorite and favorite not in str(favoritelist):
             data = session.get("data")
             datalist = supabase.table('notes').select('*').eq('subjectname',data).execute().data
@@ -81,22 +88,65 @@ def home(id):
             datalist = supabase.table('notes').select('*').eq('subjectname',data).execute().data
             favoritelist = favoritelist.replace(favorite,"")
             supabase.table('users').update({'favorites':favoritelist}).eq('id',id).execute()
-    return render_template("home.html",navsublst=eval(navsub["subjects"]),pdflist=datalist,favoritelist=favoritelist,id=navsub["id"])
-
-@app.route("/upload/<id>",methods=["POST","GET"])
-def upload(id):
-    if request.method == "POST":
-        file = request.files["file"]
-        subject = request.form["subject"].upper()
-        topic = request.form["topic"].upper()
-        idnote = "".join(random.sample(string.hexdigits,6))
-        date = datetime.now().date().strftime(r"%d/%m/%Y")
-        filetype = file.filename.split(".")[-1]
-        filename = secure_filename(subject+"_"+topic+"."+filetype)
-        filelink = f"static/database/{filename}"
-        file.save(filelink)
-        supabase.table('notes').insert({"id": idnote,"date": date,"filename": filename,"subjectname": subject,"filetype": filetype,"filelink": filelink}).execute()
-    return render_template("upload.html",id=id)
+        try:
+            num = int(request.form["numsub"]) 
+            username = navsub["username"]
+            print(num)
+            if num:
+                active = "active"
+            try:
+                for x in range(num):
+                    subject = request.form[f"subject_{x}"].upper()
+                    print(subject)
+                    if subject != "" and subject != " " and len(subject)!=0 and subject not in tempnavsub:
+                        tempnavsub.append(subject)
+                navsub["subjects"] = str(tempnavsub)
+                supabase.table('users').update({'subjects':tempnavsub}).eq('username',username).execute()
+            except KeyError:
+                pass
+        except KeyError:
+            pass
+        try:
+            tempnavsub = eval(navsub["subjects"])
+            username = navsub["username"]
+            editsub = request.form.get("editsubject")
+            if editsub:
+                active_r = "active"
+            else:
+                active_r = ""
+            try:
+                tempnavsub.remove(editsub)
+                supabase.table('users').update({'subjects':tempnavsub}).eq('username',username).execute()
+                navsub["subjects"] = str(tempnavsub)
+                print(tempnavsub)
+            except ValueError:
+                pass
+        except KeyError:
+            pass
+        try:
+            file = request.files["file"]
+            subject = request.form["subject"].upper()
+            topic = request.form["topic"].upper()
+            idnote = "".join(random.sample(string.hexdigits,6))
+            date = datetime.now().date().strftime(r"%d/%m/%Y")
+            filetype = file.filename.split(".")[-1]
+            filename = secure_filename(subject+"_"+topic+"."+filetype)
+            filelink = f"static/database/{filename}"
+            file.save(filelink)
+            if filetype !="pdf":
+                print("Please Upload Only PDFs")
+                flash("Please Upload Only PDFs")
+                active_u = "active"
+            else:
+                active_u = ""
+                resp = supabase.storage.from_("userfilestorage").upload(filename,filelink,{"content-type":"application/pdf"})
+                print(resp)
+                fileurl = supabase.storage.from_("userfilestorage").get_public_url(filename)
+                print(fileurl)
+                supabase.table('notes').insert({"id": idnote,"date": date,"filename": filename,"subjectname": subject,"filetype": filetype,"filelink": fileurl}).execute()
+        except KeyError:
+            pass
+    return render_template("home.html",active_u=active_u,active=active,navsublst=eval(navsub["subjects"]),pdflist=datalist,favoritelist=favoritelist,id=navsub["id"],data=data,username=navsub["username"],previewfile=preview,num=num,tempnavsub=tempnavsub,active_r=active_r)
 
 @app.route("/favorites/<id>",methods=["POST","GET"])
 def favorites(id):
@@ -114,43 +164,6 @@ def favorites(id):
             notesid = notesid.replace(unfavorite,"")
             supabase.table('users').update({'favorites':notesid}).eq('id',id).execute()
     return render_template("favorites.html",favoritelist=favoritelist,id=id)
-
-@app.route("/addsubjects/<id>",methods=["POST","GET"])
-def addsubject(id):
-    navsub = supabase.table('users').select('*').eq('id',id).execute().data[0]
-    num=0
-    tempnavsub = eval(navsub["subjects"])
-    username = navsub["username"]
-    if request.method == "POST":
-        num = int(request.form["numsub"]) 
-        try:
-            for x in range(num):
-                subject = request.form[f"subject_{x}"].upper()
-                print(subject)
-                if subject != "" and subject != " " and len(subject)!=0 and subject not in tempnavsub:
-                    tempnavsub.append(subject)
-            navsub["subjects"] = str(tempnavsub)
-            supabase.table('users').update({'subjects':tempnavsub}).eq('username',username).execute()
-        except KeyError:
-            pass
-    return render_template("addsubject.html",tempnavsub=tempnavsub,num=num,id=id)
-
-@app.route("/removesubjects/<id>",methods=["POST","GET"])
-def removesubject(id):
-    navsub = supabase.table('users').select('*').eq('id',id).execute().data[0]
-    num=0
-    tempnavsub = eval(navsub["subjects"])
-    username = navsub["username"]
-    if request.method == "POST":
-        editsub = request.form.get("editsubject")
-        try:
-            tempnavsub.remove(editsub)
-            supabase.table('users').update({'subjects':tempnavsub}).eq('username',username).execute()
-            navsub["subjects"] = str(tempnavsub)
-            print(tempnavsub)
-        except ValueError:
-            pass
-    return render_template("removesubjects.html",tempnavsub=tempnavsub,num=num,id=id)
 
 @app.route("/signin",methods=["POST","GET"])
 def signin():
