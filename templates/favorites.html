@@ -9,34 +9,44 @@
 </head>
 <body>
     <nav id="horinav">
-        <form action="/home" name="navbar" method="post" class="navform">
-        <a href="/home" class="navbutton"><button>Home</button></a>
-        {% for subject in navsub %}
+        <form action="/home/{{id}}" name="navbar" method="post" class="navform">
+        <a href="/home/{{id}}" class="navbutton"><button><img class="logo" src="{{ url_for('static',filename='logo.png')}}" alt="logo"></button></a>
+        {% for subject in navsublst %}
             <button name="navbarsubject" value="{{ subject }}" class="navbutton">{{ subject }}</button>
         {% endfor %}
-    </form>
-    <a href="/favorites" class="navbutton"><button>Favorites</button></a>
-    <a href="/addsubjects" class="navbutton"><button>Add Subjects</button></a>
-    <a href="/removesubjects" class="navbutton"><button>Remove Subjects</button></a>
+        </form>
+        <a href="/favorites/{{id}}" class="navbutton"><button><span>&#9733;</span></button></a>
+    </form>    
     </nav>
     <div id="nav-files">
-        <nav id="whitenav">
-            <div><a href="/upload" style="text-decoration: none;"><button id="upload-button">+</button></a><span style="text-decoration: none;color: #583DA1;">ADD FILE</span></div>
-        </nav>
-    <form action="/favorites" name="getfile" method="post" style="padding: 3rem;">
+    <nav id="whitenav">
+        <div style="width: 100vw;height: 6rem;">
+        <a href="/upload/{{id}}" style="text-decoration: none;"><button id="upload-button">+</button></a><span style="text-decoration: none;color: #583DA1;">ADD FILE</span>
+        </div>
+    </nav>
+    <form action="/favorites/{{id}}" name="getfile" method="post">
         <div id="home-container" style="display: flex;">
             {% for pdf in favoritelist %} 
             <div id="pdf-file-containter">
-            <button id="unfavorite-button" name="unfavorite" value="{{ pdf }}" style="background-color: rgb(255, 208, 0); border-color: rgb(255, 208, 0);"></button>
+            <button id="unfavorite-button" name="unfavorite" value="{{ pdf['id'] }}" style="background-color: rgb(255, 208, 0); border-color: rgb(255, 208, 0);"></button>
             <div id="pdf-details">
                 <embed src="{{ pdf['filelink'] }}"><br>
                     <p>{{ pdf['filename'] }}</p>
                 </div>
-                <button id="download-button" name="pdfbutton" value="{{ pdf }}">Download</button>
+                <button id="preview" value="{{ pdf }}" name="preview" data-preview-target="#preview-pdf" type="button">Preview</button>
             </div> 
             {% endfor %}
+            {% if favoritelist|length == 0 %}
+            <p>You haven't selected any favorites!</p>
+            {% endif %}
         </div>
     </form>
     </div>
+    <div id="preview-pdf" class="preview-pdf">
+        <div id="preview-pdf-filename">
+        </div>
+    </div>
+    <div id="overlay" class="{{active}} {{active_r}}"></div> 
+    <script src="{{ url_for('static',filename='index.js')}}"></script>
 </body>
 </html>

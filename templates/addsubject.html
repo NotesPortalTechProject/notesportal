@@ -8,18 +8,19 @@
 </head>
 <body>
     <nav id="horinav">
-        <form action="/home" name="navbar" method="post" class="navform">
-        <a href="/home" class="navbutton"><button>Home</button></a>
-        {% for subject in navsub %}
+        <form action="/home/{{id}}" name="navbar" method="post" class="navform">
+            <a href="/home/{{id}}" class="navbutton"><button>Home</button></a>
+            {% for subject in navsub %}
             <button name="navbarsubject" value="{{ subject }}" class="navbutton">{{ subject }}</button>
         {% endfor %}
     </form>
-    <a href="/favorites" class="navbutton"><button>Favorites</button></a>
-    <a href="/addsubjects" class="navbutton"><button>Add Subjects</button></a>
-    <a href="/removesubjects" class="navbutton"><button>Remove Subjects</button></a>
+    <a href="/favorites/{{id}}" class="navbutton"><button>Favorites</button></a>
+    <a href="/addsubjects/{{id}}" class="navbutton"><button>Add Subjects</button></a>
+    <a href="/removesubjects/{{id}}" class="navbutton"><button>Remove Subjects</button></a>
     </nav>
     
-    <div id="editsublst">
+    
+    <div id="editsublst" style="margin-left: 20rem;">
         <form action="" method="post" enctype="multipart/form-data">
         <p>Add Subjects</p>
         <label for="numsub">Number of Subjects:</label>

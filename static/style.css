@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 body{
-    background-color: #e3e6eb;
+    background-color: white;
     margin: 0;
     display: flex;
     font-family: "Roboto", sans-serif;
     overflow-x: hidden;
 }
 #pdf-file-containter{
-    border: 2px solid black;
-    border-radius: 10%;
+    border: 5px solid #583DA1;
+    border-radius: 7%;
     margin-right: 1rem;
     background-color: white;
     text-align: center;
@@ -18,7 +18,6 @@ body{
 #pdf-file{
     border-radius: 5%;
     border: 2px solid black;
-    
 }
 #favorite-button,#unfavorite-button{
     height: 2rem;
@@ -29,16 +28,16 @@ body{
     margin-right: 1.5rem;
     z-index: -1;
 }
-
-#download-button {
-    border-bottom-left-radius: 1.7rem;
-    border-bottom-right-radius: 1.7rem;
+#preview {
+    border-bottom-left-radius: 1.1rem;
+    border-bottom-right-radius: 1.1rem;
     width: 100%;
     height: 3rem;
-    background-color: #FAFAFA;
+    background-color: #583DA1;
+    color: white;
+    font-weight: bold;
     border: transparent;
-    border-bottom: 2px solid black;
-    border-top: 2px solid gainsboro;
+    border: none;
 }
 #pdf-details{
     padding: 1.5rem;
@@ -67,7 +66,7 @@ body{
     display: block;
     margin-left: 0;
     height: 100vh;
-    width: 10rem;
+    width: 5rem;
     background-color: black;  
     margin-top: 0; 
     padding-top: 25vh;
@@ -77,58 +76,318 @@ body{
 #home-container{
     display: flex;
     flex-wrap: wrap;
-    margin-top: 4rem;
-    margin-left: 9rem;
+    margin-top: 5rem;
+    margin-left: 8rem;
 }
 #horinav button{
-    width: 10rem;
+    width: 5rem;
     height: 3rem;
     background-color: transparent;
     color: white;
-    font-size: 1rem;
+    font-size: 1.2rem;
     border-radius: 1rem;
     margin-bottom: 2rem;
+    border: none;
+    text-align: left;
+}
+#horinav button:hover{
+    color: antiquewhite;
+}
+
+.logo{
+    width: 55%;
+    padding-bottom: 33% ;
+    font-size: 30px;
+    color: #fff;
     
 }
+
 #whitenav{
     width: 100vw;
-    height: 7rem;
-    background-color: white;
+    height: 6rem;
+    background-color: #e3e6eb;
     position: fixed;
     z-index: 1;
 }
+
 #nav-files{
     display: flex;
     flex-direction: column;
-    
+}
+
+#login-form-div{
+    display: flex;
+    /* width: 50vw; */
+    justify-content: center;
+}
+#form-signin{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    font-size: 1.2rem;
+}
+#form-signin input{
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid black;
+    margin-top: 1rem;
+    font-size: 1.2rem;
+}
+#form-signin button{
+    background-color: blueviolet;
+    border-radius: 5rem;
+    color: white;
+    font-size: 1.2rem;
+    width: 10rem;
+    border: none;
+}
+#signinbutton{
+    background-color: white;
+    border-radius: 5rem;
+    color: blueviolet;
+    font-size: 1.2rem;
+    width: 10rem;
+    border: none;
+}
+#signin-form-div{
+    width: 50vw;
+}
+*:focus{
+    outline: none;
+}
+.profile{
+    margin-left: 90vw; 
+    background-color: black;
+    border: none;
+    height:3rem;
+    width: 3rem; 
+    margin-bottom: 0.5rem;
+    border-radius: 50%;
+}
+.profile-open{
+    position: fixed;
+    z-index: 21;
+    top: 10%;
+    left: 74%;
+    border: 2px solid #583DA1;
+    padding: 2rem;
+    background-color: #1d006d;
+    transform: scale(0);
+    border-radius: 20px;
+    color: white;
+    margin-right: 2rem;
+}
+.profilebuttons button{
+    margin-bottom: 2rem;
+    background-color: transparent;
+    border-radius: 10px;
+    color: white;
+    border: none;
+    border: 2px solid #583DA1;
+    padding: 0.5rem;
+}
+.profilebuttons{
+    display: flex;
+    justify-content: space-between;
+}
+.profile-open #close{
+    display: block;
+    margin-left: auto;
+    margin-right: 0;
+    background: none;
+    border: none;
+    font-size: 1.7rem;
+    color: #1d006d;
+}
+.profiletitle{
+    display: flex;
+    font-size: 1.5rem;
+    background-color: rgba(88,61,161,0.8);
+    padding: 0.7rem;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+}
+.profile-open.active{
+    transform: scale(1);
+}
+#overlay{
+    position: fixed;
+    opacity: 0;
+    top:0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+}
+#overlay.active{
+    opacity: 1;
+    pointer-events: all;
+    z-index: 20;
+}
+.preview-pdf{
+    z-index: 50;
+    width: 40rem;
+    height: 50rem;
+    top: 50%;
+    left: 50%;
+    background-color: wheat;
+    position: fixed;
+    transform: translate(-50%,-50%) scale(0);
+
+}
+.preview-pdf.active{
+    z-index: 50;
+    width: 40rem;
+    height: 50rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%) scale(1);
+}
+#preview-pdf-file
+{
+    width: 40rem;
+    height: 50rem;
+}
+.addsub,.remsub{
+    z-index: 50;
+    width: 20rem;
+    top: 50%;
+    left: 50%;
+    background:#1d006d;
+    border: 2px solid #583DA1;
+    color: white;
+    position: fixed;
+    transform: translate(-50%,-50%) scale(0);
+    border-radius: 15px;
+    padding: 1rem;
+    font-weight: bold;
+}
+.addsub.active,.remsub.active{
+    transform: translate(-50%,-50%) scale(1);
+}
+.addsubbody button,.uploadfilebody button{
+    background-color: rgba(88,61,161,0.8);
+    border-radius: 20px;
+    border: #1d006d;
+    color: white;
+    padding: 1rem;
+    font-weight: bold;
+}
+.remsubele,.addsubele{
+    margin-bottom: 2rem;
+    background-color: rgba(88,61,161,0.8);
+    padding: 1rem;
+    display: flex;
+    border-radius: 20px;
+    color: white;
+}
+.remsubtitle,.addsubtitle,.uploadfiletitle{
+    margin-bottom: 1.7rem;
+    text-align: center;
+    font-size: 1.6rem;
+    display: flex;
+    padding-bottom: 0.8rem;    
+}
+.addsubbodytile{
+    padding-bottom: 0.8rem; 
+    text-align: center;   
+}
+.addsubele{
+    background-color: transparent;
+}
+.addsubele input{
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #583DA1;
+    color: white;
+    font-size: 1.1rem;
+}
+.addsubbodytile input{
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #583DA1;
+    color: white;
+    width: 2.3rem;
+}
+.addsubele input::placeholder{
+    color: rgba(88,61,161,0.8);
+}
+.addsubele input:focus{
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #583DA1;
+}
+.addsub form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.remsubtitle button,.addsubtitle button,.uploadfiletitle button{
+    display: block;
+    margin-left: auto;
+    margin-right: 0;
+    background: none;
+    border: none;
+    font-size: 1.7rem;
+    color: #583DA1;
+}
+.remsubele button{
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: 0;
+    border: 2px solid red;
+    background-color: transparent;
+    border-radius: 50%;
+    font-size: 1rem;
+    color: red;
+}
+.uploadfile{
+    z-index: 50;
+    width: 20rem;
+    top: 50%;
+    left: 50%;
+    background:#1d006d;
+    border: 2px solid #583DA1;
+    color: white;
+    position: fixed;
+    transform: translate(-50%,-50%) scale(0);
+    border-radius: 15px;
+    padding: 1rem;
+    font-weight: bold;
+}
+.uploadfile.active{
+    transform: translate(-50%,-50%) scale(1);
 }
 .uploadform{
     display: flex;
     flex-direction: column;
-    padding-left: 11rem;
     justify-content: center;
-    align-items: center;
-}
-#upload-form-container{
-    justify-content: center;
-    position: relative;
-    align-items: center;
-    height: 100vh;
-    width: 100vw;
-}
-#editsublst #editsubject{
-    height: 2rem;
-    width: 2rem;
-    background-color: transparent;
-    color: white;
-    font-size: 2rem;
-    border-radius: 50%;
     text-align: center;
-    background-color: rgb(223, 59, 59);
+    align-items: center;
+    padding: 3rem;
 }
-#editsublst{
-    display: flex;
-    flex-direction: column;
-    padding-left: 11rem;
+.uploadform input{
+    margin-bottom: 2rem;
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #583DA1;
+    color: white;
+    font-size: 1rem;
 }
-/* ALIGN THE UPLOAD BUTTON */
+#file{
+    width: 15rem;
+    border: none;
+}
+#file::file-selector-button{
+    background-color: transparent;
+    color: #583DA1;
+    padding: 0.7rem;
+    background-color: rgba(88,61,161,0.8);
+    border-radius: 20px;
+    border: #1d006d;
+    color: white;
+    padding: 1rem;
+    font-weight: bold;
+}

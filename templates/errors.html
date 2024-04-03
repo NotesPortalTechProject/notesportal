@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sora" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>confirmation</title>
+</head>
+<style>
+    body
+    {
+        background-color: #d3d3d3;
+        font-family: "Sora";
+    }
+    .error
+    {
+        margin-top: 2rem;
+        background-color: white;
+        padding: 25px;
+        border-radius: 10px;
+        font-size: 1.5rem;
+    }
+    .errorheading
+    {
+        font-weight: 700;
+        padding-top: 20px;
+    }
+    button
+    {
+        padding: 7px;
+        border-radius: 5px;
+        font-size: 1.5rem;
+        transition: 0.3s;
+    }
+    button:hover
+    {
+        
+        box-shadow: 0px 0px 3px 3px darkgray;
+        font-size: 1.6rem;
+    }
+    img
+    {
+        width: 100%;
+        height:20rem;
+        border-radius: 10px;
+    }
+</style>
+<body>
+    <div class="container">
+        {% if F==1 %}
+        <div class="error">
+            <img src="/static/redgrad.jpg">
+            <p class="errorheading">ERROR: FAILED TO CREATE ACCOUNT</p>
+            <p class="errorflag">{{username}}</p>
+            <div class="errorbox">
+                <p>Error occured while creating account.
+                    Username already exists cannot be used again.
+                    Try something different
+                </p>
+                <form action="\" method="post">
+                    <input type="text" name="flag" value="tryagain" style="display: none;">
+                    <button type="submit">Continue</button>
+                </form>
+            </div>
+        </div>
+        {% elif F==2 %}
+        <div class="error">
+            <img src="/static/redgrad.jpg">
+            <p class="errorheading">ERROR: FAILED TO CREATE ACCOUNT</p>
+            <p class="errorflag">{{mail}}</p>
+            <div class="errorbox">
+                <p>Error occured while creating account.
+                    Email already in use cannot use again.
+                    Try using a different email id
+                </p>
+                <form action="\" method="post">
+                    <input type="text" name="flag" value="tryagain" style="display: none;">
+                    <button type="submit">Continue</button>
+                </form>
+            </div>
+        </div>
+        {% elif F==3 %}
+        <div class="error">
+            <img src="/static/redgrad.jpg">
+            <p class="errorheading">ERROR: FAILED TO SIGN IN</p>
+            <p class="errorflag">{{username}}</p>
+            <div class="errorbox">
+                <p>Error occured while trying to sign in.
+                    Entered user doesnt exist.
+                    Check whether the input for username is correct.
+                </p>
+                <form action="\" method="post">
+                    <input type="text" name="flag" value="tryagain" style="display: none;">
+                    <button type="submit">Continue</button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
