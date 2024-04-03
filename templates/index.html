@@ -3,34 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{{ url_for('static',filename='style.css')}}">
+    <title>Notesportal</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='signupsignin.css')}}">
+    <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>]
 </head>
-<body style="margin: 0;overflow-y: hidden;">
-    <div id="login-form-div"> 
-        <div id="image-form">
-            <img src="static/form-image.jpeg" alt="">
-        </div>
-    <div id="signin-form-div">
-    <form action="" name="user" method="post" enctype="multipart/form-data" style="padding: 3rem;" id="form-signin">
-        <label for="firstname">First Name</label>
-        <input type="text" name="firstname" value="{{ firstname }}"><br>
-        <label for="lastname">Last Name</label>
-        <input type="text" name="lastname" value="{{ lastname }}"><br>
-        <label for="username">Username</label>
-        <input type="text" name="username" value="{{ username }}"><br>
-        <label for="email">Email</label>
-        <input type="email" name="email" value="{{ mail }}"><br>
-        <label for="numsub">Number of Subjects:</label>
-        <input type="number" name="numsub" id="numsub" value="{{ num }}" min="0"><br>
-        {% for x in range(num) %}
-        <label for="subject_{{ x }}">Subject {{ x+1 }}</label>
-        <input type="text" name="subject_{{ x }}"><br>
-        {% endfor %}
-        <button type="submit">Submit</button><br>
-    </form>
-    <a href="/signin" style="height: 1.2rem;"><button id="signinbutton">Sign in</button></a>
-</div>
-</div>
+<body>
+       <div class="container {{mode}}">
+            <div class="form-container">
+                 <div class="signin-signup">
+                    <form action="" class="sign-in-form" action="" method="post" enctype="multipart/form-data">
+                    <input type="text" name="flag" value="signin" style="display: none;">
+                        <h2 class="title">Sign in</h2>
+                    <div class="input-field">
+                        <i class="fas fa-user"></i>
+                        <input type="text" name="username" placeholder="Username">
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" name="password" placeholder="Password">
+                    </div>
+                    <input type="submit" value="Login" class="btn">
+                    {% with messages = get_flashed_messages()%}
+                    {% if messages%}
+                        {% for message in messages%}
+                            <p style="color: red;">{{message}}</p>
+                        {%endfor%}
+                    {%endif%}
+                    {%endwith%}
+                    </form>
+                    <form action="" class="sign-up-form" name="user" method="post" enctype="multipart/form-data">
+                    <input type="text" name="flag" value="signup" style="display: none;">
+                        <h2 class="title">Sign up</h2>
+                    <div class="input-field">
+                        <i class="fas fa-user"></i>
+                            <input type="text" name="firstname" value="{{ firstname }}" placeholder="First name">
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-user"></i>
+                        <input type="text" name="lastname" value="{{ lastname }}" placeholder="Last name">
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-user"></i>
+                        <input type="text" name="username" value="{{ username }}" placeholder="Username">
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-key"></i>
+                        <input type="password" name="password" id="password" value="{{ password }}" placeholder="Password">
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-envelope"></i>
+                        <input type="text" name="email" value="{{ mail }}" placeholder="Email">
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-file"></i>
+                        <input type="number" name="numsub" id="numsub" value="{{ num }}" min="0" placeholder="No of subjects">
+                    </div>
+                    
+                    {% for x in range(num) %}
+                    <div class="input-field">
+                        <i class="fas fa-file"></i>
+                        <input type="text" name="subject_{{ x }}" placeholder="Enter subject {{x+1}}">
+                    </div>
+                    {% endfor %}
+                    <input type="submit" value="Sign up" class="btn">
+                    
+                    </form>
+                 </div>
+            </div>
+            <div class="panels-container">
+                <div class="panel left-panel">
+                    <div class="content">
+                        <h3>New here??</h3>
+                        <p>Haven't signed up create a account now to access files</p>
+                        <button class="btn transparent" id="sign-up-btn">Sign Up</button>
+                    </div>
+                    <img src="static/log-in2.svg" class="image" alt="">
+                </div>
+                <div class="panel right-panel">
+                    <div class="content">
+                        <h3>Already a user?</h3>
+                        <p>Log in to access saved files</p>
+                        <button class="btn transparent" id="sign-in-btn">Sign In</button>
+                    </div>
+                    <img src="static/sign-in2.svg" class="image" alt="">
+                </div>
+            </div>    
+       </div> 
+       <script src="tech.js"></script>
 </body>
+<script src="{{ url_for('static',filename='tech.js')}}"></script>
 </html>

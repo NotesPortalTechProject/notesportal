@@ -27,7 +27,6 @@ previews.forEach(preview => {
         `     
     })
 })
-
 openpopup.forEach(button => {
     button.addEventListener("click",() => {
         const popup = document.querySelector(button.dataset.profileTarget)
@@ -66,10 +65,10 @@ openpdf.forEach(button => {
         console.log("Hello World")
     })
 })
-
 closepdf.forEach(button => {
     button.addEventListener("click",() => {
         const pdf = button.closest(".preview-pdf")
+        document.getElementById("preview-pdf").innerHTML = ""
         closepopupfunc(pdf)
     })
 })
@@ -103,6 +102,7 @@ closeuploadfile.forEach(button => {
 overlay.addEventListener('click', () => {
     const popups = document.querySelectorAll('.profile-open.active')
     const pdfs = document.querySelectorAll(".preview-pdf.active")
+    document.getElementById("preview-pdf").innerHTML = ""
     popups.forEach(popup => {
       closepopupfunc(popup)
       
@@ -111,7 +111,6 @@ overlay.addEventListener('click', () => {
         closepopupfunc(pdf)
     })
   })
-
 
 function openpopupfunc(popup)
 {

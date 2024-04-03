@@ -36,6 +36,9 @@
                 <button id="preview" value="{{ pdf }}" name="preview" data-preview-target="#preview-pdf" type="button">Preview</button>
             </div> 
             {% endfor %}
+            {% if favoritelist|length == 0 %}
+            <p>You haven't selected any favorites!</p>
+            {% endif %}
         </div>
     </form>
     </div>

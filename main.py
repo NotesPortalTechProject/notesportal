@@ -20,34 +20,66 @@ def index():
     lastname = ""
     username = ""
     mail = ""
+    password = ""
     num = 0
     subjectlst = []
+    mode=''
     if request.method == "POST":
-        firstname = request.form["firstname"]
-        lastname = request.form["lastname"]
-        username = request.form["username"]
-        mail = request.form["email"]
-        num = int(request.form["numsub"])
-        userslst = supabase.table('users').select("*").eq('username',username).execute().data 
-        if len(userslst) == 0:
-            try:
-                for x in range(num):
-                    subjectlst.append(request.form[f"subject_{x}"].upper())
-                session["data"] = subjectlst[0]
-                sendmail(username,mail=mail,message=f"""Hello {username}
-    Welcome To Our Portal""")
-                supabase.table('users').insert({"id": id,"firstname": firstname,"lastname": lastname,"username": username,"email": mail,"subjects": str(subjectlst)}).execute()
-                navtemplst = [id,firstname,lastname,username,mail,str(subjectlst)]
-                keylst = ["id","firstname","lastname","username","email","subjects"]
-                for x in range(6):
-                    navsub[keylst[x]] = navtemplst[x]
-                return redirect(url_for("home",id=id))
-            except KeyError:
-                pass
-        else:
-            print("User Already Exists")
-            return redirect(url_for("/signin"))
-    return render_template("index.html",num=num,firstname=firstname,lastname=lastname,username=username,mail=mail,id=id)
+        data=request.form
+        if(data['flag']=='signup'):
+            firstname = request.form["firstname"]
+            lastname = request.form["lastname"]
+            username = request.form["username"]
+            password = request.form["password"]
+            mail = request.form["email"]
+            num = int(request.form["numsub"])
+            userslst = supabase.table('users').select("*").eq('username',username).execute().data
+            if(len(userslst)==0):
+                try:
+                    mode='sign-up-mode'
+                    for x in range(num):
+                        subjectlst.append(request.form[f"subject_{x}"].upper())
+                    session["data"] = subjectlst[0]
+                    sendmail(username,mail=mail,message=f"""Hello {username},
+                             Welcome To Our Portal""")
+                    supabase.table('users').insert({"id": id,"firstname": firstname,"lastname": lastname,"username": username,"email": mail,"subjects": str(subjectlst),"password":password}).execute()
+                    navtemplst = [id,firstname,lastname,username,mail,str(subjectlst),password]
+                    keylst = ["id","firstname","lastname","username","email","subjects","password"]
+                    for x in range(6):
+                        navsub[keylst[x]] = navtemplst[x]
+                        return redirect(url_for("home",id=id))
+                except KeyError:
+                    pass
+            else:
+                mode=''
+                errorflag=0
+                userdata= supabase.table('users').select("*").eq('username',username).execute().data[0]
+                if(userdata['username']==username):
+                    errorflag=1
+                elif(userdata['email']==mail):
+                    errorflag=2
+                return render_template('errors.html',F=errorflag)
+        elif(data['flag']=='signin'):
+                navsub = {}
+                session["data"] = ""
+                username = request.form["username"]
+                password = request.form["password"]
+                tempdict = supabase.table('users').select("*").eq('username',username).execute().data
+                checkpass = supabase.table('users').select("password").eq('username',username).execute().data[0]["password"]
+                if checkpass == password:
+                    if(len(tempdict)==0):
+                        errorflag=3
+                        return render_template('errors.html',F=errorflag)
+                    else:
+                        tempdict=tempdict[0]
+                        for i,j in list(tempdict.items()):
+                            navsub[i] = j
+                        sendmail(name=navsub["username"],mail=navsub["email"],message=f"""Hello {navsub["username"]},
+                                Welcome Back To Our Portal""")
+                        return redirect(url_for("home",id=navsub["id"]))
+                else:
+                    flash("Incorrect Password")
+    return render_template("index.html",mode=mode,num=num,firstname=firstname,lastname=lastname,username=username,mail=mail,id=id,password=password)
 
 @app.route("/home/<id>",methods=["POST","GET"])
 def home(id):
@@ -152,32 +184,21 @@ def home(id):
 def favorites(id):
     notesid = supabase.table('users').select('favorites').eq('id',id).execute().data[0]["favorites"]
     idlist = notesid.strip().split(" ")
+    favoritelist = []
     favoritelist = supabase.table("notes").select("*").in_("id",idlist).execute().data
-    if request.method == "POST":
-        choosefile = request.form.get("pdfbutton")
-        if choosefile:
-            choosefile = choosefile.replace("\'","\"")
-            choosefile = json.loads(choosefile)
-            return send_file(choosefile["filelink"],download_name=choosefile["filename"],as_attachment=True)
-        unfavorite = request.form.get("unfavorite")
-        if unfavorite:
-            notesid = notesid.replace(unfavorite,"")
-            supabase.table('users').update({'favorites':notesid}).eq('id',id).execute()
+    if favoritelist:
+        if request.method == "POST":
+            choosefile = request.form.get("pdfbutton")
+            if choosefile:
+                choosefile = choosefile.replace("\'","\"")
+                choosefile = json.loads(choosefile)
+                return send_file(choosefile["filelink"],download_name=choosefile["filename"],as_attachment=True)
+            unfavorite = request.form.get("unfavorite")
+            if unfavorite:
+                notesid = notesid.replace(unfavorite,"")
+                supabase.table('users').update({'favorites':notesid}).eq('id',id).execute()
     return render_template("favorites.html",favoritelist=favoritelist,id=id)
 
-@app.route("/signin",methods=["POST","GET"])
-def signin():
-    navsub = {}
-    session["data"] = ""
-    if request.method == "POST":
-        username = request.form["username"]
-        tempdict = supabase.table('users').select("*").eq('username',username).execute().data[0]
-        for i,j in list(tempdict.items()):
-            navsub[i] = j
-        sendmail(name=navsub["username"],mail=navsub["email"],message=f"""Hello {navsub["username"]}
-    Welcome Back To Our Portal""")
-        return redirect(url_for("home",id=navsub["id"]))
-    return render_template("signin.html")
 @app.route("/sharvil")
 def sharvil():
     return render_template("sharvil.html")

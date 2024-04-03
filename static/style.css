@@ -18,7 +18,6 @@ body{
 #pdf-file{
     border-radius: 5%;
     border: 2px solid black;
-    
 }
 #favorite-button,#unfavorite-button{
     height: 2rem;
