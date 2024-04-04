@@ -54,7 +54,7 @@ def index():
     mycursor.close() 
     return render_template("index.html",num=num,firstname=firstname,lastname=lastname,username=username,mail=mail)
 
-@app.route("/home",methods=["POST","GET"])
+@app.route("/home>",methods=["POST","GET"])
 def home():
     global navsub
     global data
