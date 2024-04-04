@@ -1,12 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=FAMILY_NAME:wght@WEIGHT_OR_RANGE&display=swap');
-
+body{
+    margin: 0;
+}
 *{
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 
 }
-
 body,input{
     font-family: 'Poppins',sans-serif;
 }

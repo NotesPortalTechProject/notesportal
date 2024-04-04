@@ -4,34 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static',filename='style.css')}}">
-    <link rel="stylesheet" href="{{ url_for('static',filename='navbar.css')}}">
-    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='bevin.css')}}">
+    <title>Favourites</title>
+    <link rel="icon" type="image/x-icon" href="/static/nplogo2.svg">
 </head>
 <body>
-    <nav id="horinav">
-        <form action="/home/{{id}}" name="navbar" method="post" class="navform">
-        <a href="/home/{{id}}" class="navbutton"><button><img class="logo" src="{{ url_for('static',filename='logo.png')}}" alt="logo"></button></a>
-        {% for subject in navsublst %}
-            <button name="navbarsubject" value="{{ subject }}" class="navbutton">{{ subject }}</button>
-        {% endfor %}
-        </form>
-        <a href="/favorites/{{id}}" class="navbutton"><button><span>&#9733;</span></button></a>
-    </form>    
-    </nav>
-    <div id="nav-files">
-    <nav id="whitenav">
-        <div style="width: 100vw;height: 6rem;">
-        <a href="/upload/{{id}}" style="text-decoration: none;"><button id="upload-button">+</button></a><span style="text-decoration: none;color: #583DA1;">ADD FILE</span>
-        </div>
-    </nav>
+    <section class="container">
+        <section class="navbar">
+            <form action="/home/{{id}}" name="navbar" method="post" class="navform">
+                <a href="/home/{{id}}"
+                  ><img
+                    class="logo"
+                    src="{{ url_for('static',filename='logo.png')}}"
+                    alt="logo"
+                /></a>
+                <ul class="nav-options">
+                  <li class="subjects">
+                    <div>
+                      <a href="#">
+                        <i class="fa-solid fa-file"></i>
+                      </a>
+                    </div>
+                    <ul class="all-subjects">
+                      <li>
+                        <a href="#" class="option-name">Subjects</a>
+                      </li>
+                      <div class="scrollable-sub">
+                        {% for subject in navsublst %}
+                        <li>
+                          <a href="#"
+                            ><button name="navbarsubject" value="{{subject}}">
+                              {{ subject }}
+                            </button></a
+                          >
+                        </li>
+                        {% endfor %}
+                      </div>
+                    </ul>
+                  </li>
+                  <li class="Favourites">
+                    <a href="/favorites/{{id}}"
+                      ><i class="fa-solid fa-bookmark"></i
+                    ></a>
+                    <p class="option-name">Favourites</p>
+                  </li>
+                </ul>
+                <a href="/" data-notes-target=".singlenotes9" class="sign-out-btn"
+                  ><i class="fa-solid fa-right-from-bracket"></i>
+                  <p class="option-name">Sign-Out</p>
+                </a>
+              </form>
+        </section>
+        <section class="secondcontainer">
+          <!-- THIS IS THE CODE FOR HEADER -->
+          <section class="header">
+            <div class="div" style="display: flex; width: 20%; align-items: center;">
+              
+            </div>
+            <div class="typed-text" id="notesText" >NOTES PORTAL</div>
+            <ul>
+                <li class="userinfoli">
+                    <button class="profile" data-profile-target="#profile-open"><i class="fa-solid fa-user"></i></button>
+                </li>
+            </ul>
+        </section>
     <form action="/favorites/{{id}}" name="getfile" method="post">
         <div id="home-container" style="display: flex;">
             {% for pdf in favoritelist %} 
             <div id="pdf-file-containter">
             <button id="unfavorite-button" name="unfavorite" value="{{ pdf['id'] }}" style="background-color: rgb(255, 208, 0); border-color: rgb(255, 208, 0);"></button>
             <div id="pdf-details">
-                <embed src="{{ pdf['filelink'] }}"><br>
-                    <p>{{ pdf['filename'] }}</p>
+                <embed src="{{ pdf['filelink'] }}"><br><br>
+                    <p>{{ pdf['filename'] }}</p><br>
                 </div>
                 <button id="preview" value="{{ pdf }}" name="preview" data-preview-target="#preview-pdf" type="button">Preview</button>
             </div> 

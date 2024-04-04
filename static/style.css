@@ -1,9 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 body{
     background-color: white;
     margin: 0;
     display: flex;
-    font-family: "Roboto", sans-serif;
+    font-family: "Poppins", sans-serif;
     overflow-x: hidden;
 }
 #pdf-file-containter{
@@ -16,7 +17,7 @@ body{
     margin: 1.5rem;
 }
 #pdf-file{
-    border-radius: 5%;
+    border-radius: 1.2rem;
     border: 2px solid black;
 }
 #favorite-button,#unfavorite-button{
@@ -49,53 +50,27 @@ body{
     background-color: #D9D9D9;
     border-radius: 50%;
     color: white;
-    border: transparent;
+    border: 2px solid #583DA1;
     position: relative;
-    font-size: 2rem;
+    font-size: 1.7rem;
     color: #583DA1;
     margin-left: 11rem;
+    text-align: center;
 }
 
 .navform{
     display: flex;
     flex-direction: column;
 }
-#horinav{
-    display: flex;
-    flex-direction: column;
-    display: block;
-    margin-left: 0;
-    height: 100vh;
-    width: 5rem;
-    background-color: black;  
-    margin-top: 0; 
-    padding-top: 25vh;
-    position: fixed;
-    z-index: 2;
-}
+
 #home-container{
     display: flex;
     flex-wrap: wrap;
-    margin-top: 5rem;
+    margin-top: 7rem;
     margin-left: 8rem;
 }
-#horinav button{
-    width: 5rem;
-    height: 3rem;
-    background-color: transparent;
-    color: white;
-    font-size: 1.2rem;
-    border-radius: 1rem;
-    margin-bottom: 2rem;
-    border: none;
-    text-align: left;
-}
-#horinav button:hover{
-    color: antiquewhite;
-}
-
 .logo{
-    width: 55%;
+    width: 33%;
     padding-bottom: 33% ;
     font-size: 30px;
     color: #fff;
@@ -156,13 +131,18 @@ body{
     outline: none;
 }
 .profile{
+    display: block;
+    margin-top: 0;
+    margin-bottom: auto;
     margin-left: 90vw; 
-    background-color: black;
     border: none;
     height:3rem;
     width: 3rem; 
     margin-bottom: 0.5rem;
     border-radius: 50%;
+    border: 1px solid #583DA1;
+    background-color: #583DA1;
+    color: white;
 }
 .profile-open{
     position: fixed;
@@ -227,8 +207,8 @@ body{
 }
 .preview-pdf{
     z-index: 50;
-    width: 40rem;
-    height: 50rem;
+    width: 40vw;
+    height: 90vh;
     top: 50%;
     left: 50%;
     background-color: wheat;
@@ -237,17 +217,12 @@ body{
 
 }
 .preview-pdf.active{
-    z-index: 50;
-    width: 40rem;
-    height: 50rem;
-    top: 50%;
-    left: 50%;
     transform: translate(-50%,-50%) scale(1);
 }
 #preview-pdf-file
 {
-    width: 40rem;
-    height: 50rem;
+    width: 100%;
+    height: 100%;
 }
 .addsub,.remsub{
     z-index: 50;
@@ -271,7 +246,7 @@ body{
     border-radius: 20px;
     border: #1d006d;
     color: white;
-    padding: 1rem;
+    padding: 1.5rem;
     font-weight: bold;
 }
 .remsubele,.addsubele{
@@ -279,6 +254,7 @@ body{
     background-color: rgba(88,61,161,0.8);
     padding: 1rem;
     display: flex;
+    
     border-radius: 20px;
     color: white;
 }
@@ -295,6 +271,7 @@ body{
 }
 .addsubele{
     background-color: transparent;
+    flex-direction: column;
 }
 .addsubele input{
     background-color: transparent;
@@ -333,6 +310,8 @@ body{
     color: #583DA1;
 }
 .remsubele button{
+    height: 1.2rem;
+    width: 1.2rem;
     text-align: center;
     display: block;
     margin-left: auto;
@@ -340,12 +319,12 @@ body{
     border: 2px solid red;
     background-color: transparent;
     border-radius: 50%;
-    font-size: 1rem;
     color: red;
+    font-weight: bold;
 }
 .uploadfile{
     z-index: 50;
-    width: 20rem;
+    width: 23rem;
     top: 50%;
     left: 50%;
     background:#1d006d;
@@ -354,7 +333,7 @@ body{
     position: fixed;
     transform: translate(-50%,-50%) scale(0);
     border-radius: 15px;
-    padding: 1rem;
+    padding: 1.5rem;
     font-weight: bold;
 }
 .uploadfile.active{
@@ -390,4 +369,104 @@ body{
     color: white;
     padding: 1rem;
     font-weight: bold;
+}
+.secondcontainer {
+    display: flex;
+    flex-direction: column;
+    width: 96%;
+    margin: 0;
+  }
+.secondcontainer .header {
+  background-color: #d9d9d9;
+  width: 100%;
+  height: 11vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 2;
+  position: fixed;
+  top: 0;
+}
+.header button {
+  font-size: 40px;
+  font-weight: 900;
+  margin: 0 0 0 50px;
+  padding: 0 15px 0 15px;
+  color: #4d5a7a;
+  background-color: #d2d2d2;
+  border-radius: 100%;
+  border: 2px solid #583DA1;
+}
+.header button::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 80px;
+  left: 40px;
+  background-color: #d9d9d9;
+  color: #4d5a7a;
+  font-size: 15px;
+  padding: 3px;
+  border-radius: 3px;
+  transition: 300ms ease-in-out;
+  opacity: 0;
+}
+.addfile:hover::before {
+  opacity: 1;
+  top: 85px;
+}
+.header ul {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+}
+.header .userinfoli {
+  display: flex;
+  width: 0%;
+  margin-right: 80px;
+  z-index: 200;
+  /* justify-content: space-around; */
+}
+.header .userinfoli .profile {
+  border: none;
+  font-size: 30px;
+  background-color: #d9d9d9;
+}
+.header .userinfo {
+  opacity: 0;
+  position: absolute;
+  /* border: 10px red solid; */
+}
+.header .userinfoli:hover .userinfo {
+  opacity: 1;
+  transition: 700ms ease-in-out;
+  transform: translateX(-100px);
+}
+.header li button {
+  font-size: 30px;
+  padding: 0 90px 0 0;
+  color: #4d5a7a;
+  position: relative;
+}
+.header li a:hover {
+  color: #10131a;
+}
+.typed-text {
+  font-size: 24px;
+  font-weight: bold;
+  padding-left: 10px;
+  width: 20%;
+  color: #583da1;
+}
+.secondcontainer .main {
+  padding: 20px 15px 20px 15px;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 80px 0 0 50px;
+}
+.secondcontainer .main form {
+  display: flex;
+  /* flex-direction: column; */
+  align-items: center;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
 }

@@ -5,34 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{data}}</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='style.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='bevin.css')}}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/40b8ba8176.js" crossorigin="anonymous"></script>
-    
+    <link rel="icon" type="image/x-icon" href="/static/nplogo2.svg">
 </head>
 <body>
-    <nav id="horinav">
-        <form action="/home/{{id}}" name="navbar" method="post" class="navform">
-        <a href="/home/{{id}}" class="navbutton"><button><img class="logo" src="{{ url_for('static',filename='logo.png')}}" alt="logo"></button></a>
-        {% for subject in navsublst %}
-            <button name="navbarsubject" value="{{ subject }}" class="navbutton">{{ subject }}</button>
-        {% endfor %}
-        </form>
-        <a href="/favorites/{{id}}" class="navbutton"><button><span>&#9733;</span></button></a>
-    </form>    
-    </nav>
-    <div id="nav-files">
-    <nav id="whitenav">
-        <section >
-        <div>
-        <button id="upload-button" data-upload-target="#uploadfilecont">+</button><span style="text-decoration: none;color: #583DA1;">ADD FILE</span>
+    <section class="container">
+        <section class="navbar">
+            <form action="/home/{{id}}" name="navbar" method="post" class="navform">
+                <a href="/home/{{id}}"
+                  ><img
+                    class="logo"
+                    src="{{ url_for('static',filename='logo.png')}}"
+                    alt="logo"
+                /></a>
+                <ul class="nav-options">
+                  <li class="subjects">
+                    <div>
+                      <a href="#">
+                        <i class="fa-solid fa-file"></i>
+                      </a>
+                    </div>
+                    <ul class="all-subjects">
+                      <li>
+                        <a href="#" class="option-name">Subjects</a>
+                      </li>
+                      <div class="scrollable-sub">
+                        {% for subject in navsublst %}
+                        <li>
+                          <a href="#"
+                            ><button name="navbarsubject" value="{{subject}}">
+                              {{ subject }}
+                            </button></a
+                          >
+                        </li>
+                        {% endfor %}
+                      </div>
+                    </ul>
+                  </li>
+                  <li class="Favourites">
+                    <a href="/favorites/{{id}}"
+                      ><i class="fa-solid fa-bookmark"></i
+                    ></a>
+                    <p class="option-name">Favourites</p>
+                  </li>
+                </ul>
+                <a href="/" data-notes-target=".singlenotes9" class="sign-out-btn"
+                  ><i class="fa-solid fa-right-from-bracket"></i>
+                  <p class="option-name">Sign-Out</p>
+                </a>
+              </form>
+        </section>
+    <section class="secondcontainer">
+      <!-- THIS IS THE CODE FOR HEADER -->
+      <section class="header">
+        <div class="div" style="display: flex; width: 20%; align-items: center;">
+          <button class="addfile" data-tooltip="Add Files" id="upload-button" data-upload-target="#uploadfilecont"
+          style="border-radius: 100%;">
+              &plus; 
+          </button>
+          <p class="typed-text" style="font-size: 1rem;">ADD FILES</p>
         </div>
-        <div>
-        <button class="profile" data-profile-target="#profile-open"></button>
-    </div>
+        <div class="typed-text" id="notesText" >NOTES PORTAL</div>
+        <ul>
+            <li class="userinfoli">
+                <button class="profile" data-profile-target="#profile-open"><i class="fa-solid fa-user"></i></button>
+            </li>
+        </ul>
     </section>
-    </nav>
     <div class="profile-open" id="profile-open">
         <div class="profiletitle">
        <span style="font-weight: bold;">Hello {{username}} 👋</span> 
@@ -51,7 +94,6 @@
         </div>
 
         <div id="uploadfile-body" class="uploadfilebody">
-            
             <form action="" method="post" enctype="multipart/form-data" class="uploadform" >
                 {% with messages = get_flashed_messages()%}
                     {% if messages%}
@@ -60,6 +102,7 @@
                         {%endfor%}
                     {%endif%}
                 {%endwith%}
+                
                 <input type="file" name="file" id="file" required>
                 <label for="subject" >
                     <input name="subject" style="width: 20rem;" type="text" placeholder="eg LADE for Linear Algebra and Differential Equation" required><br>
@@ -116,11 +159,12 @@
                 {% else %}
                 <button name="favorite" id="favorite-button" value="{{ pdflist[i]['id'] }}"></button>
                 {% endif %}
-                <!-- <button id="preview" value="{{ pdflist[i] }}" name="preview" data-preview-target="#preview-pdf" type="button"><i class="fa-solid fa-expand"></i></button> -->
                 </div>
                 <div id="pdf-details">
-                <embed id="pdf-file" src="{{ pdflist[i]['filelink'] }}"><br>
+                <embed id="pdf-file" src="{{ pdflist[i]['filelink'] }}">
+                  <br><br>
                     <p>{{ pdflist[i]['filename'][:-4] }}</p>
+                    <br>
                 </div>
                 <button id="preview" value="{{ pdflist[i] }}" name="preview" data-preview-target="#preview-pdf" type="button">Preview</button>
             </div>

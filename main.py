@@ -4,7 +4,7 @@ import random,string,json
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from mailsend import sendmail
-from supabase import create_client
+from supabase import create_client,StorageException
 
 app  = Flask(__name__)
 app.secret_key = "please_work"
@@ -39,7 +39,10 @@ def index():
                     mode='sign-up-mode'
                     for x in range(num):
                         subjectlst.append(request.form[f"subject_{x}"].upper())
-                    session["data"] = subjectlst[0]
+                    try:
+                        session["data"] = subjectlst[0]
+                    except ValueError:
+                        pass
                     sendmail(username,mail=mail,message=f"""Hello {username},
                              Welcome To Our Portal""")
                     supabase.table('users').insert({"id": id,"firstname": firstname,"lastname": lastname,"username": username,"email": mail,"subjects": str(subjectlst),"password":password}).execute()
@@ -61,7 +64,6 @@ def index():
                 return render_template('errors.html',F=errorflag)
         elif(data['flag']=='signin'):
                 navsub = {}
-                session["data"] = ""
                 username = request.form["username"]
                 password = request.form["password"]
                 tempdict = supabase.table('users').select("*").eq('username',username).execute().data
@@ -72,6 +74,10 @@ def index():
                         return render_template('errors.html',F=errorflag)
                     else:
                         tempdict=tempdict[0]
+                        try:
+                            session["data"] = eval(tempdict["subjects"])[0]
+                        except ValueError:
+                            pass
                         for i,j in list(tempdict.items()):
                             navsub[i] = j
                         sendmail(name=navsub["username"],mail=navsub["email"],message=f"""Hello {navsub["username"]},
@@ -88,13 +94,14 @@ def home(id):
     datalist = []
     preview = ""
     tempnavsub = eval(navsub["subjects"])
+    data = session.get("data")
+    datalist = supabase.table('notes').select('*').eq('subjectname',data).execute().data
     active = ""
     active_r = ""
     active_u = ""
     num=0
     if not favoritelist:
         favoritelist = ""
-    data = session.get("data")
     if request.method == "POST":
         try:
             data = request.form.get("navbarsubject")
@@ -103,13 +110,8 @@ def home(id):
                 datalist = supabase.table('notes').select('*').eq('subjectname',data).execute().data
         except KeyError:
             pass
-        choosefile = request.form.get("pdfbutton")
         favorite = request.form.get("favorite")
         print(data)
-        if choosefile:
-            choosefile = choosefile.replace("\'","\"")
-            choosefile = json.loads(choosefile)
-            return send_file(choosefile["filelink"],download_name=choosefile["filename"],as_attachment=True)
         if favorite and favorite not in str(favoritelist):
             data = session.get("data")
             datalist = supabase.table('notes').select('*').eq('subjectname',data).execute().data
@@ -170,14 +172,17 @@ def home(id):
                 flash("Please Upload Only PDFs")
                 active_u = "active"
             else:
-                active_u = ""
-                resp = supabase.storage.from_("userfilestorage").upload(filename,filelink,{"content-type":"application/pdf"})
-                print(resp)
-                fileurl = supabase.storage.from_("userfilestorage").get_public_url(filename)
-                print(fileurl)
-                supabase.table('notes').insert({"id": idnote,"date": date,"filename": filename,"subjectname": subject,"filetype": filetype,"filelink": fileurl}).execute()
+                try: 
+                    active_u = ""
+                    resp = supabase.storage.from_("userfilestorage").upload(filename,filelink,{"content-type":"application/pdf"})
+                    fileurl = supabase.storage.from_("userfilestorage").get_public_url(filename)
+                    supabase.table('notes').insert({"id": idnote,"date": date,"filename": filename,"subjectname": subject,"filetype": filetype,"filelink": fileurl}).execute()
+                
+                except StorageException:
+                    active_u = "active"
+                    flash("Resource Already Exists")
         except KeyError:
-            pass
+                    pass
     return render_template("home.html",active_u=active_u,active=active,navsublst=eval(navsub["subjects"]),pdflist=datalist,favoritelist=favoritelist,id=navsub["id"],data=data,username=navsub["username"],previewfile=preview,num=num,tempnavsub=tempnavsub,active_r=active_r)
 
 @app.route("/favorites/<id>",methods=["POST","GET"])
@@ -186,13 +191,8 @@ def favorites(id):
     idlist = notesid.strip().split(" ")
     favoritelist = []
     favoritelist = supabase.table("notes").select("*").in_("id",idlist).execute().data
-    if favoritelist:
+    if len(favoritelist) > 0:
         if request.method == "POST":
-            choosefile = request.form.get("pdfbutton")
-            if choosefile:
-                choosefile = choosefile.replace("\'","\"")
-                choosefile = json.loads(choosefile)
-                return send_file(choosefile["filelink"],download_name=choosefile["filename"],as_attachment=True)
             unfavorite = request.form.get("unfavorite")
             if unfavorite:
                 notesid = notesid.replace(unfavorite,"")
