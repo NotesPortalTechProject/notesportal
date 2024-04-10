@@ -232,3 +232,9 @@ form.sign-up-form{
     z-index: 2;
     opacity: 1;
 }
+
+.subs{
+    width: 60%;
+    max-height: 7rem;
+    overflow-y: auto;
+}

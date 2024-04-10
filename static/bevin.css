@@ -21,7 +21,7 @@
   }
   .container .navbar {
     background: #10131a;
-    width: 4%;
+    width: 4rem;
     height: 100vh;
     position: fixed;
     top: 0;
@@ -69,7 +69,8 @@
   }
   .container .navbar .nav-options .all-subjects {
     position: absolute;
-    left: 190%;
+    margin-left: 2rem;
+    /* fix this  */
     border: #583da1 solid 3px;
     width: 30vb;
     top: 0;
@@ -94,7 +95,7 @@
   }
   .container .navbar .nav-options li .option-name {
     opacity: 1;
-    width: 100px;
+    width: 110px;
   }
   .container .navbar .nav-options .Favourites {
     display: flex;
@@ -106,7 +107,7 @@
   }
   .container .navbar .nav-options .Favourites .option-name {
     position: absolute;
-    left: 190%;
+    margin-left: 2rem;
     padding: 10px 0px;
     border-radius: 0px 10px 10px 0px;
     opacity: 0;
@@ -131,6 +132,7 @@
     pointer-events: none;
     font-size: 20px;
     color: #fff;
+    
   }
   
   /* HOVERING EFFECTS FOR THE NAVBAR */
@@ -148,6 +150,7 @@
     opacity: 1;
     width: 150%;
     transition: 300ms ease-in-out;
+    
   }
   .container .navbar .nav-options .all-subjects a button:hover {
     color: #fff;
@@ -157,4 +160,8 @@
   .container .navbar .sign-out-btn:hover {
     color: #4d5a7a;
     transition: 300ms ease-in-out;
+  }
+  .homenav{
+    margin-left: -0.3rem;
+    padding-bottom: 0;
   }

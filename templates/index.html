@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='signupsignin.css')}}">
     <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
     <link rel="icon" type="image/x-icon" href="/static/nplogo2.svg">
+    <link rel="icon" href="{{ url_for('static',filename='logo.png')}}">
 </head>
 <body>
        <div class="container {{mode}}">
@@ -17,16 +18,17 @@
                         <h2 class="title">Sign in</h2>
                     <div class="input-field">
                         <i class="fas fa-user"></i>
-                        <input type="text" name="username" placeholder="Username">
+                        <input type="text" name="username" placeholder="Username" required>
                     </div>
                     <div class="input-field">
                         <i class="fas fa-lock"></i>
-                        <input type="password" name="password" placeholder="Password">
+                        <input type="password" name="password" placeholder="Password" required>
                     </div>
                     <input type="submit" value="Login" class="btn">
                     {% with messages = get_flashed_messages()%}
                     {% if messages%}
                         {% for message in messages%}
+                        <br>
                             <p style="color: red;">{{message}}</p>
                         {%endfor%}
                     {%endif%}
@@ -37,35 +39,38 @@
                         <h2 class="title">Sign up</h2>
                     <div class="input-field">
                         <i class="fas fa-user"></i>
-                            <input type="text" name="firstname" value="{{ firstname }}" placeholder="First name">
+                            <input type="text" name="firstname" value="{{ firstname }}" placeholder="First name" minlength="3" required>
                     </div>
                     <div class="input-field">
                         <i class="fas fa-user"></i>
-                        <input type="text" name="lastname" value="{{ lastname }}" placeholder="Last name">
+                        <input type="text" name="lastname" value="{{ lastname }}" placeholder="Last name" minlength="3" required>
                     </div>
                     <div class="input-field">
                         <i class="fas fa-user"></i>
-                        <input type="text" name="username" value="{{ username }}" placeholder="Username">
+                        <input type="text" name="username" value="{{ username }}" placeholder="Username" required>
                     </div>
                     <div class="input-field">
                         <i class="fas fa-key"></i>
-                        <input type="password" name="password" id="password" value="{{ password }}" placeholder="Password">
+                        <input type="password" name="password" id="password" value="{{ password }}" placeholder="Password" required>
                     </div>
                     <div class="input-field">
                         <i class="fas fa-envelope"></i>
-                        <input type="text" name="email" value="{{ mail }}" placeholder="Email">
+                        <input type="text" name="email" value="{{ mail }}" placeholder="Email" required>
                     </div>
                     <div class="input-field">
                         <i class="fas fa-file"></i>
-                        <input type="number" name="numsub" id="numsub" value="{{ num }}" min="0" placeholder="No of subjects">
+                        <input type="number" name="numsub" id="numsub" value="{{ num }}" min="0" placeholder="No of subjects" required>
                     </div>
-                    
+                    <div class="subs">
+                    {% if num != "" %}
                     {% for x in range(num) %}
                     <div class="input-field">
                         <i class="fas fa-file"></i>
-                        <input type="text" name="subject_{{ x }}" placeholder="Enter subject {{x+1}}">
+                        <input type="text" name="subject_{{ x }}" placeholder="Enter subject {{x+1}} code (eg LADE)" maxlength="7">
                     </div>
                     {% endfor %}
+                    {% endif %}
+                    </div>
                     <input type="submit" value="Sign up" class="btn">
                     
                     </form>

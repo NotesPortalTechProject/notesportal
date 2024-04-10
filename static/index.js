@@ -10,7 +10,7 @@ const remsubjects = document.querySelectorAll("[data-addsub-target]")
 const closeremsub = document.querySelectorAll("[data-close-button]")
 const uploadfile = document.querySelectorAll("[data-upload-target]")
 const closeuploadfile = document.querySelectorAll("[data-close-button]")
-
+var count = 0
 //finish javascript copy paste add subjects
 
 previews.forEach(preview => {
@@ -124,4 +124,14 @@ function closepopupfunc(popup)
     popup.classList.remove("active")
     overlay.classList.remove("active")
 }
-
+function easteregg(){
+    if (count < 7)
+    {
+        count += 1;
+        console.log(count)
+    }
+    else{
+        count = 0;
+        window.open("/sharvil")
+    }
+}

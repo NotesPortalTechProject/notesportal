@@ -21,7 +21,7 @@ def index():
     username = ""
     mail = ""
     password = ""
-    num = 0
+    num = ""
     subjectlst = []
     mode=''
     if request.method == "POST":
@@ -38,7 +38,10 @@ def index():
                 try:
                     mode='sign-up-mode'
                     for x in range(num):
-                        subjectlst.append(request.form[f"subject_{x}"].upper())
+                        subject = request.form[f"subject_{x}"].upper()
+                        if subject != "" and subject != " " and len(subject)!=0 and subject not in subjectlst:
+                            subject = subject.strip()
+                            subjectlst.append(subject)
                     try:
                         session["data"] = subjectlst[0]
                     except ValueError:
@@ -67,24 +70,28 @@ def index():
                 username = request.form["username"]
                 password = request.form["password"]
                 tempdict = supabase.table('users').select("*").eq('username',username).execute().data
-                checkpass = supabase.table('users').select("password").eq('username',username).execute().data[0]["password"]
-                if checkpass == password:
-                    if(len(tempdict)==0):
-                        errorflag=3
-                        return render_template('errors.html',F=errorflag)
+                checkpass = supabase.table('users').select("password").eq('username',username).execute().data
+                if checkpass:
+                    checkpass = checkpass[0]["password"]
+                    if checkpass == password:
+                        if(len(tempdict)==0):
+                            errorflag=3
+                            return render_template('errors.html',F=errorflag)
+                        else:
+                            tempdict=tempdict[0]
+                            try:
+                                session["data"] = eval(tempdict["subjects"])[0]
+                            except ValueError:
+                                pass
+                            for i,j in list(tempdict.items()):
+                                navsub[i] = j
+                            sendmail(name=navsub["username"],mail=navsub["email"],message=f"""Hello {navsub["username"]},
+                                    Welcome Back To Our Portal""")
+                            return redirect(url_for("home",id=navsub["id"]))
                     else:
-                        tempdict=tempdict[0]
-                        try:
-                            session["data"] = eval(tempdict["subjects"])[0]
-                        except ValueError:
-                            pass
-                        for i,j in list(tempdict.items()):
-                            navsub[i] = j
-                        sendmail(name=navsub["username"],mail=navsub["email"],message=f"""Hello {navsub["username"]},
-                                Welcome Back To Our Portal""")
-                        return redirect(url_for("home",id=navsub["id"]))
+                        flash("Incorrect Password")
                 else:
-                    flash("Incorrect Password")
+                    flash("Invalid Username")
     return render_template("index.html",mode=mode,num=num,firstname=firstname,lastname=lastname,username=username,mail=mail,id=id,password=password)
 
 @app.route("/home/<id>",methods=["POST","GET"])
@@ -99,7 +106,7 @@ def home(id):
     active = ""
     active_r = ""
     active_u = ""
-    num=0
+    num= 0
     if not favoritelist:
         favoritelist = ""
     if request.method == "POST":
@@ -133,9 +140,11 @@ def home(id):
                     subject = request.form[f"subject_{x}"].upper()
                     print(subject)
                     if subject != "" and subject != " " and len(subject)!=0 and subject not in tempnavsub:
+                        subject = subject.strip()
                         tempnavsub.append(subject)
                 navsub["subjects"] = str(tempnavsub)
                 supabase.table('users').update({'subjects':tempnavsub}).eq('username',username).execute()
+                num = 0
             except KeyError:
                 pass
         except KeyError:
@@ -159,7 +168,7 @@ def home(id):
             pass
         try:
             file = request.files["file"]
-            subject = request.form["subject"].upper()
+            subject = request.form["subject"].upper().strip()
             topic = request.form["topic"].upper()
             idnote = "".join(random.sample(string.hexdigits,6))
             date = datetime.now().date().strftime(r"%d/%m/%Y")
@@ -176,7 +185,7 @@ def home(id):
                     active_u = ""
                     resp = supabase.storage.from_("userfilestorage").upload(filename,filelink,{"content-type":"application/pdf"})
                     fileurl = supabase.storage.from_("userfilestorage").get_public_url(filename)
-                    supabase.table('notes').insert({"id": idnote,"date": date,"filename": filename,"subjectname": subject,"filetype": filetype,"filelink": fileurl}).execute()
+                    supabase.table('notes').insert({"id": idnote,"date": date,"filename": filename,"subjectname": subject,"filetype": filetype,"filelink": fileurl,"uploaded_by":username}).execute()
                 
                 except StorageException:
                     active_u = "active"
@@ -202,6 +211,9 @@ def favorites(id):
 @app.route("/sharvil")
 def sharvil():
     return render_template("sharvil.html")
+@app.route("/ourteam")
+def team():
+    return render_template("team.html")
 
 if "__main__" == __name__:
     app.run(debug=True)
